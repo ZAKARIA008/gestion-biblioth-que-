@@ -1,0 +1,521 @@
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3a0ca3;
+    --accent-color: #f72585;
+    --text-color: #2b2d42;
+    --light-text: #8d99ae;
+    --background: #f8f9fa;
+    --card-bg: #ffffff;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 15px 25px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+*,
+*::before,
+*::after {
+        box-sizing: border-box;
+}
+
+body {
+        font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--background);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+}
+
+.book-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: none;
+        border-radius: var(--border-radius);
+        padding: 25px;
+        margin: 20px;
+        text-align: center;
+        background-color: var(--card-bg);
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+}
+
+.book-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+}
+
+.book-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+}
+
+.book-card:hover::after {
+        transform: scaleX(1);
+}
+
+.book-card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: calc(var(--border-radius) - 2px);
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+}
+
+.book-card:hover img {
+        transform: scale(1.03);
+}
+
+.book-card h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 15px 0 10px;
+        color: var(--primary-color);
+}
+
+.book-card p {
+        font-size: 1rem;
+        color: var(--light-text);
+        line-height: 1.5;
+}
+
+button {
+        display: inline-block;
+        padding: 12px 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fff;
+        background: var(--primary-color);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+}
+
+button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--accent-color);
+        z-index: -1;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.4s ease-out;
+}
+
+button:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
+}
+
+button:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+}
+
+button:active {
+        transform: translateY(1px);
+        box-shadow: var(--shadow-sm);
+}
+.button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        gap: 10px;
+}
+
+.button-container button {
+        flex: 1;
+        margin: 0 5px;
+}
+
+.selected-books {
+        max-height: 600px;
+        overflow-y: auto;
+        padding: 30px;
+        margin: 40px auto;
+        border: none;
+        border-radius: var(--border-radius);
+        background-color: var(--card-bg);
+        box-shadow: var(--shadow-md);
+        width: 90%;
+        max-width: 1000px;
+        display: block;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) var(--background);
+}
+
+.selected-books::-webkit-scrollbar {
+        width: 8px;
+}
+
+.selected-books::-webkit-scrollbar-track {
+        background: var(--background);
+        border-radius: 10px;
+}
+
+.selected-books::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 10px;
+}
+
+.modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        transition: all 0.3s ease;
+}
+
+.modal-content {
+        background-color: var(--card-bg);
+        margin: 10% auto;
+        padding: 30px;
+        border: none;
+        width: 90%;
+        max-width: 550px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        transform: translateY(20px);
+        opacity: 0;
+        animation: modalFadeIn 0.4s forwards;
+}
+
+@keyframes modalFadeIn {
+        to {
+                opacity: 1;
+                transform: translateY(0);
+        }
+}
+
+.close {
+        color: var(--light-text);
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        transition: var(--transition);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+}
+
+.close:hover,
+.close:focus {
+        color: var(--accent-color);
+        text-decoration: none;
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+        .book-card {
+                padding: 20px;
+                margin: 15px 10px;
+        }
+        
+        .modal-content {
+                width: 95%;
+                margin: 15% auto;
+                padding: 20px;
+        }
+        
+        .selected-books {
+                padding: 20px;
+                max-height: 500px;
+        }
+}
+
+.header-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-md);
+}
+
+.section-title {
+        font-weight: 600;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 0.5rem;
+        display: inline-block;
+}
+
+.book-card .btn-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+}
+
+.book-card {
+        display: flex;
+        flex-direction: column;
+}
+
+.book-card .card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+}
+
+.book-card .card-footer {
+        display: flex;
+        justify-content: center;
+        background: transparent;
+        border-top: none;
+        padding-top: 1rem;
+}
+
+.search-container {
+        max-width: 600px;
+        margin: 0 auto;
+}
+
+.search-container .form-control {
+        border-radius: 50px 0 0 50px;
+        padding-left: 1.5rem;
+}
+
+.search-container .btn {
+        border-radius: 0 50px 50px 0;
+        padding-right: 1.5rem;
+}
+
+.navbar {
+        box-shadow: var(--shadow-sm);
+}
+
+.navbar-brand {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+}
+
+.nav-link {
+        font-weight: 500;
+        transition: var(--transition);
+}
+
+.nav-link:hover {
+        transform: translateY(-2px);
+}
+
+#book-list button,
+#selected-books-list button {
+        margin: 0 auto;
+        display: block;
+}
+
+.modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+}
+
+.modal-content {
+        background-color: var(--card-bg);
+        margin: 10% auto;
+        padding: 20px;
+        border: none;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+}
+
+.close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--light-text);
+        cursor: pointer;
+        transition: var(--transition);
+}
+
+.close:hover {
+        color: var(--accent-color);
+}
+
+.book-card h4 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin: 15px 0 10px;
+        transition: var(--transition);
+}
+
+.book-card h4:hover {
+        color: var(--accent-color);
+}
+
+.book-card p:nth-of-type(2) {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin: 10px 0;
+        background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+}
+
+.book-card p:nth-of-type(3) {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--light-text);
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+}
+
+.book-card p:nth-of-type(3)::before {
+        content: "❤️";
+        margin-right: 8px;
+        font-size: 1.2rem;
+}
+.book-card p:nth-of-type(2)::before {
+        content: "💰";
+        margin-right: 8px;
+}
+.book-card {
+        border: 1px solid var(--primary-color);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        background-color: var(--card-bg);
+        box-shadow: var(--shadow-md);
+        transition: var(--transition);
+}
+
+.book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+}
+
+#add-book-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+}
+
+#add-book-modal .modal-content {
+        background-color: var(--card-bg);
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        width: 90%;
+        max-width: 500px;
+}
+
+#add-book-modal .form-group {
+        margin-bottom: 15px;
+}
+
+#add-book-modal label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+}
+
+#add-book-modal input,
+#add-book-modal textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid var(--light-text);
+        border-radius: 8px;
+        font-size: 1rem;
+}
+
+#add-book-modal button {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+}
+
+#add-book-modal button:hover {
+        background-color: var(--secondary-color);
+}
+
+#book-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+}
+
+.book-card {
+        flex: 1 1 300px; 
+        max-width: 300px;
+}
+
+#selected-books-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+}
+
+#selected-books-list .book-card {
+        flex: 1 1 300px; 
+        max-width: 300px;
+}
+.blur-background {
+        position: relative;
+        min-height: 100vh; 
+        backdrop-filter: blur(10px); 
+        background-color: rgba(255, 255, 255, 0.5); 
+}
